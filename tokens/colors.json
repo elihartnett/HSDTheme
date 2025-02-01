@@ -1,0 +1,15 @@
+{
+  "color": {
+    "primary": {
+      "value": {
+        "light": "#FF0000",
+        "dark": "#00FF00"
+      },
+      "type": "color"
+    },
+    "secondary": {
+      "value": "#0000FF",
+      "type": "color"
+    }
+  }
+}
