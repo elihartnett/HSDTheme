@@ -2,7 +2,7 @@ const { isDynamicToken } = require("./helpers");
 
 module.exports = function registerIosSwiftDynamicColorFormat(StyleDictionary) {
   StyleDictionary.registerFormat({
-    name: "ios-swift/color",
+    name: "ios-swiftui/color",
     format: function ({ dictionary }) {
       const tokens = dictionary.allProperties || dictionary.allTokens;
 

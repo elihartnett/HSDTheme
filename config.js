@@ -1,14 +1,17 @@
 const StyleDictionary = require("style-dictionary").default;
 
 // Register color formats (already provided)
-const registerIosSwiftColorFormat = require("./ios-swift-color-format");
-const registerAndroidJetpackComposeColorFormat = require("./android-jetpack-color-format");
-
+const registerIosSwiftColorFormat = require("./ios-swiftui-color-format");
 registerIosSwiftColorFormat(StyleDictionary);
+
+const registerIosSwiftFontFormat = require("./ios-swiftui-font-format");
+registerIosSwiftFontFormat(StyleDictionary);
+
+const registerAndroidJetpackComposeColorFormat = require("./android-jetpack-color-format");
 registerAndroidJetpackComposeColorFormat(StyleDictionary);
 
-const registerIosSwiftFontFormat = require("./ios-swift-font-format");
-registerIosSwiftFontFormat(StyleDictionary);
+const registerAndroidJetpackComposeFontFormat = require("./android-jetpack-font-format");
+registerAndroidJetpackComposeFontFormat(StyleDictionary);
 
 const config = {
   source: ["tokens/**/*.json"],
@@ -18,12 +21,12 @@ const config = {
       files: [
         {
           destination: "Color.swift",
-          format: "ios-swift/color",
+          format: "ios-swiftui/color",
           filter: (token) => token.path[0] === "color",
         },
         {
           destination: "Font.swift",
-          format: "ios-swift/font",
+          format: "ios-swiftui/font",
           filter: (token) => token.path[0] === "font",
         },
       ],
@@ -35,6 +38,11 @@ const config = {
           destination: "Color.kt",
           format: "android-jetpack/color",
           filter: (token) => token.path[0] === "color",
+        },
+        {
+          destination: "Font.kt",
+          format: "android-jetpack/font",
+          filter: (token) => token.path[0] === "font",
         },
       ],
     },
