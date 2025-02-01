@@ -1,13 +1,3 @@
-function camelCase(path) {
-  return path
-    .map((word, i) =>
-      i === 0
-        ? word.toLowerCase()
-        : word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-    )
-    .join("");
-}
-
 function isDynamicToken(token) {
   return (
     token.value &&
@@ -18,6 +8,5 @@ function isDynamicToken(token) {
 }
 
 module.exports = {
-  camelCase,
   isDynamicToken,
 };

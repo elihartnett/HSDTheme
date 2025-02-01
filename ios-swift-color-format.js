@@ -1,8 +1,8 @@
-const { camelCase, isDynamicToken } = require("./helpers");
+const { isDynamicToken } = require("./helpers");
 
 module.exports = function registerIosSwiftDynamicColorFormat(StyleDictionary) {
   StyleDictionary.registerFormat({
-    name: "ios-swift/dynamic-color",
+    name: "ios-swift/color",
     format: function ({ dictionary }) {
       const tokens = dictionary.allProperties || dictionary.allTokens;
 
@@ -27,7 +27,7 @@ extension UIColor {
       const properties = tokens
         .map((token) => {
           if (isDynamicToken(token)) {
-            return `    static var ${camelCase(token.path)}: Color {
+            return `    static var ${token.path[1]}: Color {
         return Color(UIColor { traitCollection in
             switch traitCollection.userInterfaceStyle {
             case .dark:
@@ -38,7 +38,7 @@ extension UIColor {
         })
     }`;
           }
-          return `    static var ${camelCase(token.path)}: Color {
+          return `    static var ${token.path[1]}: Color {
         return Color(UIColor(hex: "${token.value}"))
     }`;
         })

@@ -1,10 +1,10 @@
-const { camelCase, isDynamicToken } = require("./helpers");
+const { isDynamicToken } = require("./helpers");
 
 module.exports = function registerAndroidJetpackComposeDynamicColorFormat(
   StyleDictionary
 ) {
   StyleDictionary.registerFormat({
-    name: "android-jetpack/dynamic-color",
+    name: "android-jetpack/color",
     format: function ({ dictionary }) {
       const tokens = dictionary.allProperties || dictionary.allTokens;
 
@@ -26,7 +26,7 @@ object DynamicColors {`;
         .map((token) => {
           if (isDynamicToken(token)) {
             return `
-    val ${camelCase(token.path)}: Color
+    val ${token.path}: Color
         @Composable
         get() = if (isSystemInDarkTheme()) {
             parseColor("${token.value.dark}")
@@ -35,7 +35,7 @@ object DynamicColors {`;
         }`;
           }
           return `
-    val ${camelCase(token.path)}: Color = parseColor("${token.value}")`;
+    val ${token.path}: Color = parseColor("${token.value}")`;
         })
         .join("\n");
 
