@@ -1,9 +1,14 @@
 const StyleDictionary = require("style-dictionary").default;
-const registerIosSwiftDynamicColorFormat = require("./ios-swift-dynamic-color-format");
-const registerAndroidJetpackComposeDynamicColorFormat = require("./android-jetpack-dynamic-color-format");
 
-registerIosSwiftDynamicColorFormat(StyleDictionary);
-registerAndroidJetpackComposeDynamicColorFormat(StyleDictionary);
+// Register color formats (already provided)
+const registerIosSwiftColorFormat = require("./ios-swift-color-format");
+const registerAndroidJetpackComposeColorFormat = require("./android-jetpack-color-format");
+
+registerIosSwiftColorFormat(StyleDictionary);
+registerAndroidJetpackComposeColorFormat(StyleDictionary);
+
+const registerIosSwiftFontFormat = require("./ios-swift-font-format");
+registerIosSwiftFontFormat(StyleDictionary);
 
 const config = {
   source: ["tokens/**/*.json"],
@@ -12,8 +17,14 @@ const config = {
       buildPath: "build/ios/",
       files: [
         {
-          destination: "DynamicColors.swift",
-          format: "ios-swift/dynamic-color",
+          destination: "Color.swift",
+          format: "ios-swift/color",
+          filter: (token) => token.path[0] === "color",
+        },
+        {
+          destination: "Font.swift",
+          format: "ios-swift/font",
+          filter: (token) => token.path[0] === "font",
         },
       ],
     },
@@ -21,8 +32,9 @@ const config = {
       buildPath: "build/android/",
       files: [
         {
-          destination: "DynamicColors.kt",
-          format: "android-jetpack/dynamic-color",
+          destination: "Color.kt",
+          format: "android-jetpack/color",
+          filter: (token) => token.path[0] === "color",
         },
       ],
     },

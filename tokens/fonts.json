@@ -1,0 +1,22 @@
+{
+  "font": {
+    "heading": {
+      "value": {
+        "fontName": "Helvetica-Bold",
+        "fontSize": 24
+      }
+    },
+    "body": {
+      "value": {
+        "fontName": "Helvetica",
+        "fontSize": 16
+      }
+    },
+    "caption": {
+      "value": {
+        "fontName": "Helvetica-Italic",
+        "fontSize": 12
+      }
+    }
+  }
+}
