@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-      "build": "node config.js"
+    "build": "node config.js"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +12,8 @@
   "type": "commonjs",
   "devDependencies": {
     "style-dictionary": "^4.3.2"
+  },
+  "dependencies": {
+    "lodash.merge": "^4.6.2"
   }
 }
