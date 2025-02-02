@@ -1,50 +1,55 @@
+const fs = require("fs");
+const path = require("path");
 const StyleDictionary = require("style-dictionary").default;
 
-// Register color formats (already provided)
-const registerIosSwiftColorFormat = require("./ios-swiftui-color-format");
-registerIosSwiftColorFormat(StyleDictionary);
+// 1. Read all theme files from the themes folder
+const themesDir = path.join(__dirname, "themes");
+const themeFiles = fs
+  .readdirSync(themesDir)
+  .filter((file) => file.endsWith(".json"));
 
-const registerIosSwiftFontFormat = require("./ios-swiftui-font-format");
-registerIosSwiftFontFormat(StyleDictionary);
+// 2. Dynamically generate file entries for iOS and Android
 
-const registerAndroidJetpackComposeColorFormat = require("./android-jetpack-color-format");
-registerAndroidJetpackComposeColorFormat(StyleDictionary);
+// Helper function to convert file name to Capitalized theme name
+function getCapitalizedThemeName(file) {
+  const themeName = path.basename(file, ".json");
+  return themeName.charAt(0).toUpperCase() + themeName.slice(1);
+}
 
-const registerAndroidJetpackComposeFontFormat = require("./android-jetpack-font-format");
-registerAndroidJetpackComposeFontFormat(StyleDictionary);
+const iosFiles = themeFiles.map((file) => {
+  const capitalizedThemeName = getCapitalizedThemeName(file);
+  return {
+    destination: `${capitalizedThemeName}Theme.swift`,
+    format: "ios/swiftui",
+  };
+});
 
+const androidFiles = themeFiles.map((file) => {
+  const capitalizedThemeName = getCapitalizedThemeName(file);
+  return {
+    destination: `${capitalizedThemeName}Theme.kt`,
+    format: "android/jetpack",
+  };
+});
+
+// 3. Register your custom formats for both platforms
+const registerSwiftUIFormat = require("./format/ios/swiftui");
+registerSwiftUIFormat(StyleDictionary);
+
+const registerJetpackThemeFormat = require("./format/android/jetpack");
+registerJetpackThemeFormat(StyleDictionary);
+
+// 4. Create your Style Dictionary configuration with the dynamic files arrays
 const config = {
-  source: ["tokens/**/*.json"],
+  source: ["themes/**/*.json"],
   platforms: {
     ios: {
       buildPath: "build/ios/",
-      files: [
-        {
-          destination: "Color.swift",
-          format: "ios-swiftui/color",
-          filter: (token) => token.path[0] === "color",
-        },
-        {
-          destination: "Font.swift",
-          format: "ios-swiftui/font",
-          filter: (token) => token.path[0] === "font",
-        },
-      ],
+      files: iosFiles,
     },
     android: {
       buildPath: "build/android/",
-      files: [
-        {
-          destination: "Color.kt",
-          format: "android-jetpack/color",
-          filter: (token) => token.path[0] === "color",
-        },
-        {
-          destination: "Font.kt",
-          format: "android-jetpack/font",
-          filter: (token) => token.path[0] === "font",
-        },
-      ],
+      files: androidFiles,
     },
   },
 };

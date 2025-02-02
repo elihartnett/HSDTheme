@@ -1,0 +1,21 @@
+{
+  "color": {
+    "primary": {
+      "value": "#000000"
+    },
+    "dynamicPrimary": {
+      "value": {
+        "light": "#000000",
+        "dark": "#FFFFFF"
+      }
+    }
+  },
+  "font": {
+    "body": {
+      "value": {
+        "fontName": "fontName",
+        "fontSize": 0
+      }
+    }
+  }
+}
