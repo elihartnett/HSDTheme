@@ -10,10 +10,15 @@
       }
     }
   },
+  "dimension": {
+    "padding": {
+      "value": 0
+    }
+  },
   "font": {
     "body": {
       "value": {
-        "fontName": "fontName",
+        "fontName": "Helvetica",
         "fontSize": 0
       }
     }

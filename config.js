@@ -54,6 +54,7 @@ const iosFiles = mergedThemeFiles.map((file) => {
   return {
     destination: `${capitalizedThemeName}Theme.swift`, // e.g., "DefaultTheme.swift"
     format: "ios/swiftui", // This is the name you registered for your iOS format
+    options: { themeName: `${capitalizedThemeName}Theme` }, // pass the theme name here
   };
 });
 
@@ -62,6 +63,7 @@ const androidFiles = mergedThemeFiles.map((file) => {
   return {
     destination: `${capitalizedThemeName}Theme.kt`, // e.g., "DefaultTheme.kt"
     format: "android/jetpack", // This is the name you registered for your Android format
+    options: { themeName: `${capitalizedThemeName}Theme` }, // pass the theme name here
   };
 });
 
