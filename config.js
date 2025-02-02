@@ -9,11 +9,18 @@ const {
 } = require("./helpers");
 
 // 1. Set up directories
+const buildDir = "./build";
+if (fs.existsSync(buildDir)) {
+  fs.rmSync(buildDir, { recursive: true, force: true });
+}
+fs.mkdirSync(buildDir, { recursive: true });
+
 const themesDir = path.join(__dirname, "themes");
 const mergedDir = path.join(themesDir, "merged");
-if (!fs.existsSync(mergedDir)) {
-  fs.mkdirSync(mergedDir, { recursive: true });
+if (fs.existsSync(mergedDir)) {
+  fs.rmSync(mergedDir, { recursive: true, force: true });
 }
+fs.mkdirSync(mergedDir, { recursive: true });
 
 // 2. Load the default theme
 const defaultThemePath = path.join(themesDir, "default.json");
