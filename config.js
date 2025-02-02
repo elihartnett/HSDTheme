@@ -2,23 +2,29 @@ const fs = require("fs");
 const path = require("path");
 const merge = require("lodash.merge");
 const StyleDictionary = require("style-dictionary").default;
+const {
+  getCapitalizedThemeName,
+  generateUnifiedIosTheme,
+  generateUnifiedAndroidTheme,
+} = require("./helpers");
 
 // 1. Set up directories
 const themesDir = path.join(__dirname, "themes");
 const mergedDir = path.join(themesDir, "merged");
-
-// Ensure the merged themes directory exists
 if (!fs.existsSync(mergedDir)) {
   fs.mkdirSync(mergedDir, { recursive: true });
 }
 
-// 2. Load the default theme (if it exists)
+// 2. Load the default theme
 const defaultThemePath = path.join(themesDir, "default.json");
-const defaultTheme = fs.existsSync(defaultThemePath)
-  ? JSON.parse(fs.readFileSync(defaultThemePath, "utf8"))
-  : {};
+if (!fs.existsSync(defaultThemePath)) {
+  throw new Error(
+    `Default theme file is required but was not found at: ${defaultThemePath}`
+  );
+}
+const defaultTheme = JSON.parse(fs.readFileSync(defaultThemePath, "utf8"));
 
-// 3. Read all theme files from the themes folder (excluding directories)
+// 3. Read all theme files from the themes folder
 const themeFiles = fs
   .readdirSync(themesDir)
   .filter((file) => file.endsWith(".json") && file !== "merged");
@@ -28,7 +34,7 @@ themeFiles.forEach((file) => {
   const themePath = path.join(themesDir, file);
   const themeData = JSON.parse(fs.readFileSync(themePath, "utf8"));
 
-  // If this is the default theme, use it as is; otherwise merge it with defaultTheme.
+  // Use the default theme as fallback unless this is the default theme itself.
   const mergedTheme =
     file === "default.json" ? themeData : merge({}, defaultTheme, themeData);
 
@@ -36,58 +42,51 @@ themeFiles.forEach((file) => {
   fs.writeFileSync(mergedPath, JSON.stringify(mergedTheme, null, 2));
 });
 
-// 5. Dynamically generate file entries for iOS and Android from the merged themes
-
-// Helper function to convert a file name to a Capitalized theme name
-function getCapitalizedThemeName(file) {
-  const themeName = path.basename(file, ".json");
-  return themeName.charAt(0).toUpperCase() + themeName.slice(1);
-}
-
-// Read merged theme files
-const mergedThemeFiles = fs
-  .readdirSync(mergedDir)
-  .filter((file) => file.endsWith(".json"));
-
-const iosFiles = mergedThemeFiles.map((file) => {
-  const capitalizedThemeName = getCapitalizedThemeName(file);
-  return {
-    destination: `${capitalizedThemeName}Theme.swift`, // e.g., "DefaultTheme.swift"
-    format: "ios/swiftui", // This is the name you registered for your iOS format
-    options: { themeName: `${capitalizedThemeName}Theme` }, // pass the theme name here
-  };
-});
-
-const androidFiles = mergedThemeFiles.map((file) => {
-  const capitalizedThemeName = getCapitalizedThemeName(file);
-  return {
-    destination: `${capitalizedThemeName}Theme.kt`, // e.g., "DefaultTheme.kt"
-    format: "android/jetpack", // This is the name you registered for your Android format
-    options: { themeName: `${capitalizedThemeName}Theme` }, // pass the theme name here
-  };
-});
-
-// 6. Register your custom formats for both platforms
+// 5. Register your custom formats for both platforms
 const registerSwiftUIFormat = require("./format/ios/swiftui");
 registerSwiftUIFormat(StyleDictionary);
 
 const registerJetpackThemeFormat = require("./format/android/jetpack");
 registerJetpackThemeFormat(StyleDictionary);
 
-// 7. Create your Style Dictionary configuration using the merged theme files as the source
-const config = {
-  source: [`${mergedDir}/**/*.json`],
-  platforms: {
-    ios: {
-      buildPath: "build/ios/",
-      files: iosFiles,
-    },
-    android: {
-      buildPath: "build/android/",
-      files: androidFiles,
-    },
-  },
-};
+// 6. For each merged theme file, create a separate Style Dictionary configuration
+const mergedThemeFiles = fs
+  .readdirSync(mergedDir)
+  .filter((file) => file.endsWith(".json"));
 
-const sd = new StyleDictionary(config);
-sd.buildAllPlatforms();
+mergedThemeFiles.forEach((file) => {
+  const capitalizedThemeName = getCapitalizedThemeName(file);
+
+  const config = {
+    source: [path.join(mergedDir, file)], // Only this theme's tokens are loaded.
+    platforms: {
+      ios: {
+        buildPath: "build/ios/",
+        files: [
+          {
+            destination: `${capitalizedThemeName}Theme.swift`,
+            format: "ios/swiftui",
+            options: { themeName: `${capitalizedThemeName}Theme` },
+          },
+        ],
+      },
+      android: {
+        buildPath: "build/android/",
+        files: [
+          {
+            destination: `${capitalizedThemeName}Theme.kt`,
+            format: "android/jetpack",
+            options: { themeName: `${capitalizedThemeName}Theme` },
+          },
+        ],
+      },
+    },
+  };
+
+  const sd = new StyleDictionary(config);
+  sd.buildAllPlatforms();
+});
+
+// Generate unified theme file for both platforms
+generateUnifiedIosTheme();
+generateUnifiedAndroidTheme();
