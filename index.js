@@ -15,9 +15,7 @@ mergeThemes(themesDirectory, mergedThemesDirectory);
 
 // Register formats
 const registerSwiftUIFormat = require("./format/ios/swiftui");
-const registerJetpackThemeFormat = require("./format/android/jetpack");
 registerSwiftUIFormat(StyleDictionary, "ios/swiftui");
-registerJetpackThemeFormat(StyleDictionary);
 
 // Create Style Dictionary configurations
 const mergedThemeFiles = fs
@@ -33,19 +31,9 @@ mergedThemeFiles.forEach((file) => {
         buildPath: "build/ios/",
         files: [
           {
-            destination: `${capitalizedThemeName}Theme.swift`,
+            destination: `${capitalizedThemeName}.swift`,
             format: "ios/swiftui",
-            options: { themeName: `${capitalizedThemeName}SDTheme` },
-          },
-        ],
-      },
-      android: {
-        buildPath: "build/android/",
-        files: [
-          {
-            destination: `${capitalizedThemeName}Theme.kt`,
-            format: "android/jetpack",
-            options: { themeName: `${capitalizedThemeName}SDTheme` },
+            options: { themeName: `${capitalizedThemeName}` },
           },
         ],
       },

@@ -15,8 +15,7 @@ module.exports = function registerSwiftUIFormat(styleDictionary, name) {
       );
       const fontTokens = allTokens.filter((token) => token.path[0] === "font");
 
-      let output = `import SwiftUI
-
+      let output = `
 struct ${themeName}: SDTheme {
 
     var colors: any SDColors = Colors()

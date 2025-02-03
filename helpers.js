@@ -3,7 +3,7 @@ const path = require("path");
 
 function getCapitalizedFileName(file) {
   const themeName = path.basename(file, ".json");
-  return themeName.charAt(0).toUpperCase() + themeName.slice(1);
+  return themeName.charAt(0).toUpperCase() + themeName.slice(1) + "SDTheme";
 }
 
 function resetDirectory(directory) {
