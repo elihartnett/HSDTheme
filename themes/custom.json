@@ -1,7 +1,20 @@
 {
-    "color": {
-      "custom": {
-        "value": "#FF0000"
+  "color": {
+    "primary": {
+      "value": "#000000"
+    }
+  },
+  "dimension": {
+    "padding": {
+      "value": 50
+    }
+  },
+  "font": {
+    "body": {
+      "value": {
+        "fontName": "Helvetica",
+        "fontSize": 0
       }
     }
+  }
 }

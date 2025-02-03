@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node config.js"
+    "build": "node index.js",
+    "postbuild": "node generateSDThemes.js"
   },
   "keywords": [],
   "author": "",
