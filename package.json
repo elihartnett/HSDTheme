@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node index.js",
-    "postbuild": "node generateSDThemes.js"
+    "postbuild": "node generateSDThemer.js"
   },
   "keywords": [],
   "author": "",

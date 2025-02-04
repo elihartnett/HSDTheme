@@ -2,9 +2,9 @@ const path = require("path");
 const fs = require("fs");
 
 const protocolName = "SDTheme";
-generateiOSSDTheme(protocolName);
+generateiOSSDThemer(protocolName);
 
-function generateiOSSDTheme(protocolName) {
+function generateiOSSDThemer(protocolName) {
   const themesDirectory = path.join(__dirname, "themes");
   // Get all theme names
   const themeNames = fs
@@ -12,7 +12,7 @@ function generateiOSSDTheme(protocolName) {
     .filter((file) => file.endsWith(".json"))
     .map((file) => path.basename(file, ".json"));
 
-  // Get all theme properites
+  // Get all theme properties
   const defaultThemePath = path.join(themesDirectory, "default.json");
   const themeData = JSON.parse(fs.readFileSync(defaultThemePath, "utf8"));
   const colorProperties = Object.keys(themeData.color || {});
@@ -21,6 +21,10 @@ function generateiOSSDTheme(protocolName) {
 
   // Generate content
   let content = `import SwiftUI
+
+struct ${protocolName}r {
+    static var theme: ${protocolName} = ${protocolName}s.default.sdTheme
+}
 
 protocol ${protocolName} {
     var colors: any SDColors { get }
@@ -40,10 +44,6 @@ protocol SDFonts {
 ${fontProperties.map((prop) => `    var ${prop}: Font { get }`).join("\n")}
 }
 
-extension EnvironmentValues {
-    @Entry var theme: ${protocolName} = ${protocolName}s.default.sdTheme
-}
-
 enum ${protocolName}s: CaseIterable {
 ${themeNames.map((name) => `    case ${name === "default" ? "`default`" : name.toLowerCase()}`).join("\n")}
 
@@ -51,12 +51,6 @@ ${themeNames.map((name) => `    case ${name === "default" ? "`default`" : name.t
         switch self {
 ${themeNames.map((name) => `        case .${name === "default" ? "`default`" : name.toLowerCase()}: return ${name.charAt(0).toUpperCase() + name.slice(1)}${protocolName}()`).join("\n")}
         }
-    }
-}
-
-extension View {
-    func applyTheme(_ sdTheme: ${protocolName}) -> some View {
-        self.environment(\\\.theme, sdTheme)
     }
 }
 
@@ -75,7 +69,7 @@ private extension UIColor {
     }
 }`;
 
-  // Copy themes into SDTheme
+  // Copy themes into SDThemer
   const buildDirectory = path.join(__dirname, "build/ios");
   const themeFiles = fs
     .readdirSync(buildDirectory)
@@ -87,5 +81,8 @@ private extension UIColor {
   content += themeFiles;
 
   // Write output to file
-  fs.writeFileSync(path.join(buildDirectory, `${protocolName}.swift`), content);
+  fs.writeFileSync(
+    path.join(buildDirectory, `${protocolName}r.swift`),
+    content
+  );
 }
