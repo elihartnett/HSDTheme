@@ -1,23 +1,20 @@
-# Style Dictionary Theme
+# SDTheme
 
 ## Overview
 
-This repository provides a Style Dictionary based theming solution for your applications, supporting both iOS and Android. A theme can hold color, dimension, and font tokens.
+This repository provides a **Style Dictionary based theme** that defines tokens for colors, dimensions, and fonts.
 
 ## How It Works
 
-A default theme, `themes/default.json`, acts as the base theme by providing fallback values. Custom themes (e.g. `themes/custom.json`) can be created, and any token not explicitly defined in a custom theme will fall back to the corresponding value in the default theme.
+The **default theme** (`themes/default.json`) serves as the base configuration. You can create **custom themes** (e.g., `themes/custom.json`) to override specific tokens. Any token not explicitly defined in a custom theme will fall back to the default theme.
 
-### Inputs
+`SDTheme`s will be generated, allowing seamless switching between themes.
 
-Themes
+## Inputs
 
-`themes/default.json`
-`themes/custom.json`
+- `themes/default.json`
+- `themes/custom.json`
 
 ## Outputs
 
-Unified theme files
-
-- **iOS:** `build/ios/Theme.swift`
-- **Android:** `build/android/Theme.kt`
+- **iOS:** `build/ios/SDTheme.swift`

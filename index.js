@@ -11,13 +11,14 @@ const mergedThemesDirectory = path.join(themesDirectory, "merged");
 resetDirectory(buildDirectory);
 resetDirectory(mergedThemesDirectory);
 
+// Merge themes
 mergeThemes(themesDirectory, mergedThemesDirectory);
 
 // Register formats
 const registerSwiftUIFormat = require("./format/ios/swiftui");
 registerSwiftUIFormat(StyleDictionary, "ios/swiftui");
 
-// Create Style Dictionary configurations
+// Create Style Dictionary configurations and build
 const mergedThemeFiles = fs
   .readdirSync(mergedThemesDirectory)
   .filter((file) => file.endsWith(".json"));
