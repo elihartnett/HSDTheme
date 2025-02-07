@@ -7,24 +7,48 @@ module.exports = function registerSwiftUIFormat(styleDictionary, name) {
       const themeName = options.themeName;
       const allTokens = dictionary.allProperties || dictionary.allTokens;
 
-      const colorTokens = allTokens.filter(
-        (token) => token.path[0] === "color"
+      const stringTokens = allTokens.filter(
+        (token) => token.path[0] === "string"
       );
       const dimensionTokens = allTokens.filter(
         (token) => token.path[0] === "dimension"
+      );
+      const colorTokens = allTokens.filter(
+        (token) => token.path[0] === "color"
       );
       const fontTokens = allTokens.filter((token) => token.path[0] === "font");
 
       let output = `
 struct ${themeName}: SDTheme {
 
-    var colors: any SDColors = Colors()
+    var strings: any SDStrings = Strings()
     var dimensions: any SDDimensions = Dimensions()
+    var colors: any SDColors = Colors()
     var fonts: any SDFonts = Fonts()
+`;
+      if (stringTokens.length > 0) {
+        output += `
+    struct Strings: SDStrings {
+`;
+        stringTokens.forEach((token) => {
+          output += `        var ${token.path[1]}: String { return "${token.value}" }
+`;
+        });
+        output += `    }
+`;
+      }
+
+      output += `
+    struct Dimensions: SDDimensions {
+`;
+      dimensionTokens.forEach((token) => {
+        output += `        var ${token.path[1]}: CGFloat { ${token.value} }
+`;
+      });
+      output += `    }
 
     struct Colors: SDColors {
 `;
-
       colorTokens.forEach((token) => {
         const prop = token.path[1];
         if (isDynamicToken(token)) {
@@ -37,33 +61,23 @@ struct ${themeName}: SDTheme {
                     return UIColor(hex: "${token.value.light}")
                 }
             })
-        }\n`;
+        }
+`;
         } else {
-          output += `        var ${prop}: Color { return Color(UIColor(hex: "${token.value}")) }\n`;
+          output += `        var ${prop}: Color { return Color(UIColor(hex: "${token.value}")) }
+`;
         }
       });
-
-      output += `    }
-
-    struct Dimensions: SDDimensions {
-`;
-
-      dimensionTokens.forEach((token) => {
-        output += `        var ${token.path[1]}: CGFloat { ${token.value} }\n`;
-      });
-
       output += `    }
 
     struct Fonts: SDFonts {
 `;
-
       fontTokens.forEach((token) => {
-        output += `        var ${token.path[1]}: Font { .custom("${token.value.fontName}", size: ${token.value.fontSize}) }\n`;
+        output += `        var ${token.path[1]}: Font { .custom("${token.value.fontName}", size: ${token.value.fontSize}) }
+`;
       });
-
       output += `    }
 }`;
-
       return output;
     },
   });

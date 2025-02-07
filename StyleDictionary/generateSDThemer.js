@@ -6,6 +6,7 @@ generateiOSSDThemer(protocolName);
 
 function generateiOSSDThemer(protocolName) {
   const themesDirectory = path.join(__dirname, "themes");
+
   // Get all theme names
   const themeNames = fs
     .readdirSync(themesDirectory)
@@ -15,11 +16,11 @@ function generateiOSSDThemer(protocolName) {
   // Get all theme properties
   const defaultThemePath = path.join(themesDirectory, "default.json");
   const themeData = JSON.parse(fs.readFileSync(defaultThemePath, "utf8"));
-  const colorProperties = Object.keys(themeData.color || {});
+  const stringProperties = Object.keys(themeData.string || {});
   const dimensionProperties = Object.keys(themeData.dimension || {});
+  const colorProperties = Object.keys(themeData.color || {});
   const fontProperties = Object.keys(themeData.font || {});
 
-  // Generate content
   let content = `import SwiftUI
 
 struct ${protocolName}r {
@@ -27,17 +28,22 @@ struct ${protocolName}r {
 }
 
 protocol ${protocolName} {
-    var colors: any SDColors { get }
+    var strings: any SDStrings { get }
     var dimensions: any SDDimensions { get }
+    var colors: any SDColors { get }
     var fonts: any SDFonts { get }
 }
 
-protocol SDColors {
-${colorProperties.map((prop) => `    var ${prop}: Color { get }`).join("\n")}
+protocol SDStrings {
+${stringProperties.map((prop) => `    var ${prop}: String { get }`).join("\n")}
 }
 
 protocol SDDimensions {
 ${dimensionProperties.map((prop) => `    var ${prop}: CGFloat { get }`).join("\n")}
+}
+
+protocol SDColors {
+${colorProperties.map((prop) => `    var ${prop}: Color { get }`).join("\n")}
 }
 
 protocol SDFonts {
@@ -67,9 +73,9 @@ private extension UIColor {
             alpha: 1.0
         )
     }
-}`;
+}
+`;
 
-  // Copy themes into SDThemer
   const buildDirectory = path.join(__dirname, "build/ios");
   const themeFiles = fs
     .readdirSync(buildDirectory)
@@ -77,10 +83,10 @@ private extension UIColor {
       (file) => file.endsWith("Theme.swift") && file !== `${protocolName}.swift`
     )
     .map((file) => fs.readFileSync(path.join(buildDirectory, file), "utf8"))
-    .join("\n\n");
+    .join("\n");
+
   content += themeFiles;
 
-  // Write output to file
   fs.writeFileSync(
     path.join(buildDirectory, `${protocolName}r.swift`),
     content

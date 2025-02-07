@@ -2,19 +2,18 @@
 
 ## Overview
 
-This repository provides a **Style Dictionary based theme** that defines tokens for colors, dimensions, and fonts.
+This repository generates a theme from tokens consisting of strings, dimensions, colors, and fonts.
 
-## How It Works
+## Sample Call
+```bash
+./driver.sh themes SDThemer.swift
+```
 
-The **default theme** (`themes/default.json`) serves as the base configuration. You can create **custom themes** (e.g., `themes/custom.json`) to override specific tokens. Any token not explicitly defined in a custom theme will fall back to the default theme.
+### Inputs
 
-`SDThemer` will be generated, allowing seamless switching between themes.
+- `themes/default.json` (required)
+- `themes/custom.json` (optional)
 
-## Inputs
+### Outputs
 
-- `themes/default.json`
-- `themes/custom.json`
-
-## Outputs
-
-- **iOS:** `build/ios/SDThemer.swift`
+- **iOS:** `SDThemer.swift`
