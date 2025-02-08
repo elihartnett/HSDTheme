@@ -24,6 +24,7 @@ rm -rf "$THEMES_DIRECTORY"
 mkdir -p "$THEMES_DIRECTORY"
 cp -r "$THEMES_SOURCE"/. "$THEMES_DIRECTORY"/
 
+npm --prefix "$DRIVER_DIRECTORY/StyleDictionary" install
 npm --prefix "$DRIVER_DIRECTORY/StyleDictionary" run build
 
 cp -r "$DRIVER_DIRECTORY/StyleDictionary/build/ios/SDThemer.swift" "$OUTPUT_DESTINATION"
