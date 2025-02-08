@@ -1,19 +1,18 @@
 # SDThemer
 
 ## Overview
+SDThemer generates a theme from tokens, including **strings**, **dimensions**, **colors**, and **fonts**.
 
-This repository generates a theme from tokens consisting of strings, dimensions, colors, and fonts.
+## Usage
+Run the following command to generate the theme:
 
-## Sample Call
 ```bash
 ./driver.sh themes SDThemer.swift
 ```
 
-### Inputs
+## Inputs
+- `themes/default.json` *(required)* – Base theme configuration.
+- `themes/custom.json` *(optional)* – Overrides or extends the default theme.
 
-- `themes/default.json` (required)
-- `themes/custom.json` (optional)
-
-### Outputs
-
-- **iOS:** `SDThemer.swift`
+## Outputs
+- **iOS:** `SDThemer.swift` *(Generated theme file for iOS projects.)*
