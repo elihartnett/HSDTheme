@@ -18,6 +18,7 @@ function generateiOSSDThemer(protocolName) {
   const themeData = JSON.parse(fs.readFileSync(defaultThemePath, "utf8"));
   const stringProperties = Object.keys(themeData.string || {});
   const dimensionProperties = Object.keys(themeData.dimension || {});
+  const boolProperties = Object.keys(themeData.bool || {});
   const colorProperties = Object.keys(themeData.color || {});
   const fontProperties = Object.keys(themeData.font || {});
 
@@ -30,6 +31,7 @@ struct ${protocolName}r {
 protocol ${protocolName} {
     var strings: any SDStrings { get }
     var dimensions: any SDDimensions { get }
+    var bools: any SDBools { get }
     var colors: any SDColors { get }
     var fonts: any SDFonts { get }
 }
@@ -40,6 +42,10 @@ ${stringProperties.map((prop) => `    var ${prop}: String { get }`).join("\n")}
 
 protocol SDDimensions {
 ${dimensionProperties.map((prop) => `    var ${prop}: CGFloat { get }`).join("\n")}
+}
+
+protocol SDBools {
+${boolProperties.map((prop) => `    var ${prop}: Bool { get }`).join("\n")}
 }
 
 protocol SDColors {

@@ -13,6 +13,7 @@ module.exports = function registerSwiftUIFormat(styleDictionary, name) {
       const dimensionTokens = allTokens.filter(
         (token) => token.path[0] === "dimension"
       );
+      const boolTokens = allTokens.filter((token) => token.path[0] === "bool");
       const colorTokens = allTokens.filter(
         (token) => token.path[0] === "color"
       );
@@ -23,20 +24,19 @@ struct ${themeName}: SDTheme {
 
     var strings: any SDStrings = Strings()
     var dimensions: any SDDimensions = Dimensions()
+    var bools: any SDBools = Bools()
     var colors: any SDColors = Colors()
     var fonts: any SDFonts = Fonts()
 `;
-      if (stringTokens.length > 0) {
-        output += `
+      output += `
     struct Strings: SDStrings {
 `;
-        stringTokens.forEach((token) => {
-          output += `        var ${token.path[1]}: String { return "${token.value}" }
+      stringTokens.forEach((token) => {
+        output += `        var ${token.path[1]}: String { return "${token.value}" }
 `;
-        });
-        output += `    }
+      });
+      output += `    }
 `;
-      }
 
       output += `
     struct Dimensions: SDDimensions {
@@ -46,7 +46,18 @@ struct ${themeName}: SDTheme {
 `;
       });
       output += `    }
+      `;
 
+      output += `
+    struct Bools: SDBools {
+  `;
+      boolTokens.forEach((token) => {
+        output += `      var ${token.path[1]}: Bool { ${token.value} }
+`;
+      });
+      output += `    }
+  `;
+      output += `
     struct Colors: SDColors {
 `;
       colorTokens.forEach((token) => {

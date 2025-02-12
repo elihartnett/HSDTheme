@@ -1,13 +1,7 @@
 {
-  "color": {
-    "primary": {
-      "value": {
-        "light": "#000000",
-        "dark": "#FFFFFF"
-      }
-    },
-    "secondary": {
-      "value": "#808080"
+  "string": {
+    "label": {
+      "value": ""
     }
   },
   "dimension": {
@@ -18,9 +12,20 @@
       "value": 0
     }
   },
-  "string": {
-    "label": {
-      "value": ""
+  "bool": {
+    "show": {
+      "value": false
+    }
+  },
+  "color": {
+    "primary": {
+      "value": {
+        "light": "#000000",
+        "dark": "#FFFFFF"
+      }
+    },
+    "secondary": {
+      "value": "#808080"
     }
   },
   "font": {

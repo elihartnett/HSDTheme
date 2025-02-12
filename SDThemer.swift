@@ -7,6 +7,7 @@ struct SDThemer {
 protocol SDTheme {
     var strings: any SDStrings { get }
     var dimensions: any SDDimensions { get }
+    var bools: any SDBools { get }
     var colors: any SDColors { get }
     var fonts: any SDFonts { get }
 }
@@ -18,6 +19,10 @@ protocol SDStrings {
 protocol SDDimensions {
     var width: CGFloat { get }
     var height: CGFloat { get }
+}
+
+protocol SDBools {
+    var show: Bool { get }
 }
 
 protocol SDColors {
@@ -60,6 +65,7 @@ struct CustomSDTheme: SDTheme {
 
     var strings: any SDStrings = Strings()
     var dimensions: any SDDimensions = Dimensions()
+    var bools: any SDBools = Bools()
     var colors: any SDColors = Colors()
     var fonts: any SDFonts = Fonts()
 
@@ -71,7 +77,11 @@ struct CustomSDTheme: SDTheme {
         var width: CGFloat { 0 }
         var height: CGFloat { 0 }
     }
-
+      
+    struct Bools: SDBools {
+        var show: Bool { false }
+    }
+  
     struct Colors: SDColors {
         var primary: Color {
             return Color(UIColor { traitCollection in
@@ -95,6 +105,7 @@ struct DefaultSDTheme: SDTheme {
 
     var strings: any SDStrings = Strings()
     var dimensions: any SDDimensions = Dimensions()
+    var bools: any SDBools = Bools()
     var colors: any SDColors = Colors()
     var fonts: any SDFonts = Fonts()
 
@@ -106,7 +117,11 @@ struct DefaultSDTheme: SDTheme {
         var width: CGFloat { 0 }
         var height: CGFloat { 0 }
     }
-
+      
+    struct Bools: SDBools {
+        var show: Bool { false }
+    }
+  
     struct Colors: SDColors {
         var primary: Color {
             return Color(UIColor { traitCollection in
