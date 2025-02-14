@@ -1,7 +1,7 @@
 # SDThemer
 
 ## Overview
-SDThemer generates a theme from tokens, including **strings**, **dimensions**, **bools**, **colors**, and **fonts**.
+SDThemer generates a theme from tokens, including **strings**, **floats**, **bools**, **colors**, and **fonts**.
 
 ## Usage
 Run the following command to generate the theme:
