@@ -18,6 +18,9 @@ mergeThemes(themesDirectory, mergedThemesDirectory);
 const registerSwiftUIFormat = require("./format/ios/swiftui");
 registerSwiftUIFormat(StyleDictionary, "ios/swiftui");
 
+const registerComposeFormat = require("./format/android/compose");
+registerComposeFormat(StyleDictionary, "android/compose");
+
 // Create Style Dictionary configurations and build
 const mergedThemeFiles = fs
   .readdirSync(mergedThemesDirectory)
@@ -34,6 +37,16 @@ mergedThemeFiles.forEach((file) => {
           {
             destination: `${capitalizedThemeName}.swift`,
             format: "ios/swiftui",
+            options: { themeName: `${capitalizedThemeName}` },
+          },
+        ],
+      },
+      android: {
+        buildPath: "build/android/",
+        files: [
+          {
+            destination: `${capitalizedThemeName}.kt`,
+            format: "android/compose",
             options: { themeName: `${capitalizedThemeName}` },
           },
         ],

@@ -97,7 +97,7 @@ struct CustomSDTheme: SDTheme {
     }
 
     struct Fonts: SDFonts {
-        var body: Font { .custom("", size: 0) }
+        var body: Font { .custom("Arial", size: 0) }
     }
 }
 
@@ -137,6 +137,6 @@ struct DefaultSDTheme: SDTheme {
     }
 
     struct Fonts: SDFonts {
-        var body: Font { .custom("", size: 0) }
+        var body: Font { .custom("Arial", size: 0) }
     }
 }
